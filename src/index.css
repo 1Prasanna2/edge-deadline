@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ink text-slate-200 font-ui antialiased overflow-x-hidden;
+  }
+  .num {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-neon {
+    @apply bg-neon/10 text-neon border border-neon/30 px-4 py-2 rounded-lg 
+           font-semibold hover:bg-neon/20 transition-all active:scale-95 disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply text-slate-400 hover:text-white px-4 py-2 rounded-lg transition-all;
+  }
+  .card {
+    @apply bg-card border border-white/5 rounded-xl shadow-sm;
+  }
+}
+
+/* Spotlight target override for tutorial */
+.tut-target {
+  position: relative;
+  z-index: 51 !important;
+}
+
+/* Accessibility: Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
