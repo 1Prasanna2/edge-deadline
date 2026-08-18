@@ -39,3 +39,6 @@
     scroll-behavior: auto !important;
   }
 }
+
+@keyframes confetti { from { transform: translateY(-10vh) rotate(0); } to { transform: translateY(110vh) rotate(720deg); } }
+.animate-confetti { animation: confetti 2.2s linear infinite; }

@@ -7,9 +7,9 @@ export const SLOTS: Record<Position, number> = { GKP: 1, DEF: 1, MID: 2, FWD: 1 
  *  ⚠️ `oppAvg` values are PLACEHOLDERS. Once simulator.ts exists, run
  *  runHarness() in the dev console and paste the printed medians here. */
 export const MODES = {
-    1: { label: 'Opening Weekend', budget: 36, pool: 'starter', oppAvg: 22 },
-    2: { label: 'Core Mode',       budget: 40, pool: 'full',    oppAvg: 22 },
-    3: { label: 'Title Run-In',    budget: 40, pool: 'full',    oppAvg: 29 },
+    1: { label: 'Opening Weekend', budget: 36, pool: 'starter', oppAvg: 22 , elite: 28},
+    2: { label: 'Core Mode',       budget: 40, pool: 'full',    oppAvg: 22 , elite: 27},
+    3: { label: 'Title Run-In',    budget: 40, pool: 'full',    oppAvg: 29 , elite: 35},
 } as const;
 export type GW = keyof typeof MODES; // 1 | 2 | 3
 
