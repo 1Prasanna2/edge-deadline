@@ -8,3 +8,7 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+
+if (import.meta.env.DEV) {
+  import('./lib/balance').then(m => { (window as unknown as { runHarness: () => void }).runHarness = m.runHarness; });
+}
