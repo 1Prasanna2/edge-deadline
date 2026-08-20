@@ -1,20 +1,28 @@
 import type { Player } from '@/data/players';
-import { MODES, type GW } from '@/lib/config';
+import { MODES, SIM_PROBS, type GW } from '@/lib/config';
 import { captainRec, edgeScore, squadComplete, transferTip } from '@/lib/edgeScoring';
 import { projection } from '@/lib/simulator';
+import { CountUp } from '@/components/UI/CountUp';
 
 const seg = (v?: number) => v === undefined ? 'bg-white/10' : v <= 2 ? 'bg-neon' : v === 3 ? 'bg-warn' : 'bg-danger';
 const badgeCls = (v: number) => v <= 2 ? 'bg-neon text-ink' : v === 3 ? 'bg-warn text-ink' : 'bg-danger text-ink';
 
-export function EdgeAssistant({ squad, budgetLeft, gw }: { squad: Player[]; budgetLeft: number; gw: GW }) {
+export function EdgeAssistant({ squad, pool, budgetLeft, gw }: {
+  squad: Player[]; pool: Player[]; budgetLeft: number; gw: GW;
+}) {
   const cap = squad.length ? captainRec(squad) : null;
   const tip = transferTip(squad, budgetLeft);
   const proj = projection(squad);
   const m = MODES[gw];
   const delta = proj - m.oppAvg;
+  const doubted = squad.filter(p => p.doubt);
   const grade = proj >= m.elite ? ['ELITE', 'text-neon border-neon/40 bg-neon/10']
     : proj >= m.oppAvg ? ['SOLID', 'text-warn border-warn/40 bg-warn/10']
     : ['RISKY', 'text-danger border-danger/40 bg-danger/10'];
+
+  const cover = (p: Player) => pool
+    .filter(q => q.pos === p.pos && !squad.some(s => s.id === q.id) && q.price <= budgetLeft + p.price)
+    .sort((a, b) => edgeScore(b) - edgeScore(a))[0];
 
   return (
     <aside data-tut="assistant" className="space-y-3">
@@ -40,6 +48,21 @@ export function EdgeAssistant({ squad, budgetLeft, gw }: { squad: Player[]; budg
           </div>
         ) : <p className="mt-2 text-xs text-slate-500">Add players to get a captain pick.</p>}
       </div>
+
+      {doubted.length > 0 && (
+        <div className="card p-3 border-danger/30 bg-danger/5">
+          <div className="text-[10px] tracking-widest text-danger">⚠ INJURY WATCH</div>
+          {doubted.map(p => {
+            const alt = cover(p);
+            return (
+              <p key={p.id} className="mt-1 text-xs text-slate-300">
+                {p.name} is doubtful — {Math.round(SIM_PROBS.doubtMiss * 100)}% chance of 0 pts.
+                {alt && <span className="text-neon"> Cover: {alt.name} (EDGE {edgeScore(alt)}).</span>}
+              </p>
+            );
+          })}
+        </div>
+      )}
 
       <div className="card p-3">
         <div className="text-[10px] tracking-widest text-slate-400">TRANSFER RECOMMENDATION</div>
@@ -77,7 +100,7 @@ export function EdgeAssistant({ squad, budgetLeft, gw }: { squad: Player[]; budg
       <div className="card p-3">
         <div className="flex justify-between text-[10px]"><span className="tracking-widest text-slate-400">EXPECTED POINTS</span><span className="num text-slate-500">GW{gw} PROJECTION</span></div>
         <div className="mt-1 flex items-end justify-between">
-          <span className="num text-4xl">{proj.toFixed(1)} <span className="text-xs text-slate-500">pts</span></span>
+          <span className="text-4xl"><CountUp value={proj} decimals={1} /> <span className="text-xs text-slate-500">pts</span></span>
           <span className={`num text-[10px] px-2 py-1 rounded-full border ${grade[1]}`}>{grade[0]}</span>
         </div>
         <div className={`num text-[11px] mt-1 ${delta >= 0 ? 'text-neon' : 'text-danger'}`}>

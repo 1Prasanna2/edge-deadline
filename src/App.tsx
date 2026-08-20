@@ -26,23 +26,31 @@ export default function App() {
         </p>
       )}
 
-      <main className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
-        <div className="lg:col-span-4">
-          <MarketGrid pool={g.gs.pool} squad={g.squad} budgetLeft={g.budgetLeft}
-            gw={g.gs.gw} rejected={g.rejected} onAdd={g.add} />
-        </div>
-        <div className="lg:col-span-5">
-          <TacticalPitch squad={g.squad} captainId={g.gs.captainId}
-            suggestedCaptainId={!g.gs.captainId && g.cap ? g.cap.pick.id : null}
-            onCaptain={g.setCaptain} onRemove={g.remove} />
-          <button data-tut="sim" className="btn-neon w-full mt-3 text-lg" onClick={g.simulate}>
-            ⚡ SIMULATE GW{g.gs.gw}
-          </button>
-        </div>
-        <div className="lg:col-span-3">
-          <EdgeAssistant squad={g.squad} budgetLeft={g.budgetLeft} gw={g.gs.gw} />
-        </div>
-      </main>
+      <main className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 pb-24 lg:pb-4">
+    <div className="lg:col-span-4">
+      <MarketGrid pool={g.gs.pool} squad={g.squad} budgetLeft={g.budgetLeft}
+       gw={g.gs.gw} rejected={g.rejected} captainId={g.gs.captainId} onAdd={g.add} />
+    </div>
+   <div className="lg:col-span-5">
+      <TacticalPitch squad={g.squad} captainId={g.gs.captainId}
+       suggestedCaptainId={!g.gs.captainId && g.cap ? g.cap.pick.id : null}
+        onCaptain={g.setCaptain} onRemove={g.remove} />
+      <button data-tut="sim" onClick={g.simulate}
+       className="btn-neon w-full mt-3 text-lg hidden lg:block">⚡ SIMULATE GW{g.gs.gw}</button>
+    </div>
+    <div className="lg:col-span-3">
+     <EdgeAssistant squad={g.squad} pool={g.gs.pool} budgetLeft={g.budgetLeft} gw={g.gs.gw} />
+       </div>
+  </main>
+
+  {g.gs.phase === 'pick' && (
+  <div className="fixed bottom-0 inset-x-0 z-40 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-ink/90 backdrop-blur border-t border-white/10 lg:hidden">
+    <div className="flex items-center gap-3">
+      <span className="num text-xs text-slate-400 whitespace-nowrap">£{g.budgetLeft.toFixed(1)}m left</span>
+      <button data-tut="sim" className="btn-neon flex-1 text-lg" onClick={g.simulate}>⚡ SIMULATE GW{g.gs.gw}</button>
+    </div>
+  </div>
+)}
 
       {g.welcome && <WelcomeModal onStart={g.startTutorial} onSkip={g.skipTutorial} />}
       {g.tutStep !== null && <TutorialOverlay step={g.tutStep} onNext={g.nextTutStep} onSkip={g.finishTutorial} />}

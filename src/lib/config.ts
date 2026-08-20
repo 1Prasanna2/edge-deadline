@@ -36,14 +36,9 @@ export const GOAL_PTS: Record<Position, number> = { GKP: 4, DEF: 4, MID: 5, FWD:
 /** GW3 comeback mechanic: cheap gems punch above their weight late. */
 export const UNDERDOG = { gw: 3, edgeBelow: 70, mult: 1.25 } as const;
 
-/** 6-player opening market (GW1). Full 12 unlocks in GW2. */
-export const STARTER_POOL = [
-  'haaland', 'palmer', 'alisson', 'trippier', 'gordon', 'watkins',
-] as const;
-
 /** Persistence keys — bump the suffix whenever a save shape changes. */
 export const KEYS = {
-  save: 'edge_save_v1',
+  save: 'edge_save_v2',   
   tutorial: 'edge_tut_v1',
   mute: 'edge_mute_v1',
 } as const;

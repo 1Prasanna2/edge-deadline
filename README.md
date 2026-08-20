@@ -1,75 +1,27 @@
-# React + TypeScript + Vite
+# ⚡ EDGE: Deadline Day
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **FPL-EDGE helped managers decide. Now you beat the algorithm.**
+> A 3-gameweek sports analytics strategy game built for the BTT Web Game Jam.
 
-Currently, two official plugins are available:
+[![CI Build Check](https://github.com/YOUR_USERNAME/edge-deadline-day/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/edge-deadline-day/actions)
+<!-- [![Vercel Deploy](https://img.shields.io/badge/Vercel-Live-000000?logo=vercel)](YOUR_VERCEL_LINK) -->
+[![Play on itch.io](https://img.shields.io/badge/itch.io-Play_Now-FA5C5C?logo=itch.io)](YOUR_ITCH_LINK)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Game Screenshot or GIF](link-to-your-screenshot-or-gif.png)
 
-## React Compiler
+## 🧠 The Concept
+Most sports games put you on the pitch. **EDGE** puts you in the front office. 
+Inspired by professional analytics dashboards (like FPL-Edge), this game turns raw football data (xG, Fixture Difficulty, Form) into a high-stakes roguelike drafting mechanic. You have a strict budget, a 60-second shot clock, and an AI Assistant that you must learn to trust—or defy.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🏗️ Architecture
+The game is 100% client-side, relying on a strict unidirectional data flow. Pure logic lives in `lib/`, state management in `hooks/`, and UI in `components/`.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+```mermaid
+graph LR
+  Data[data/players.ts] --> Engine[lib/simulator.ts]
+  Data --> Brain[lib/edgeScoring.ts]
+  Config[lib/config.ts] --> Engine
+  Config --> Brain
+  Engine --> State[hooks/useGame.ts]
+  Brain --> State
+  State --> UI[components/*]

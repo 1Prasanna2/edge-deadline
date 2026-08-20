@@ -1,4 +1,5 @@
 import { type GW } from '@/lib/config';
+import {CountUp} from './CountUp';
 
 export function BudgetBar({ gw, totals, muted, onMute, onHelp }: {
   gw: GW; totals: number[]; muted: boolean; onMute: () => void; onHelp: () => void;
@@ -21,7 +22,7 @@ export function BudgetBar({ gw, totals, muted, onMute, onHelp }: {
               g === gw ? 'bg-neon text-ink font-bold shadow-glow' : g < gw ? 'text-neon border border-neon/30' : 'text-slate-600 border border-white/5'}`}>GW{g}</span>
           ))}
           <span className="num text-xs px-3 py-1 rounded-full border border-white/10">
-            TOTAL <b className="text-neon">{totals.reduce((s, t) => s + t, 0)}</b> pts
+            TOTAL <b className="text-neon"><CountUp value={totals.reduce((s, t) => s + t, 0)} /></b> pts
           </span>
           <button className="btn-ghost text-xs" onClick={onMute}>{muted ? '🔇' : '🔊'}</button>
           <button className="btn-ghost text-xs w-7 h-7 rounded-full border border-white/10" onClick={onHelp}>?</button>

@@ -1,11 +1,11 @@
-import { PLAYERS, type Player } from '@/data/players';
-import { CAPTAIN_CONF, EDGE_BANDS, SLOTS, type Position } from './config';
+import { PLAYERS, type Player, type Position } from '@/data/players';
+import { CAPTAIN_CONF, EDGE_BANDS, SLOTS } from './config';
 
 const values = (pick: (p: Player) => number) => PLAYERS.map(pick);
 const pct = (v: number, all: number[]) =>
-  (all.filter(x => x < v).length / (all.length - 1)) * 100;
+  all.length < 2 ? 50 : (all.filter(x => x < v).length / (all.length - 1)) * 100;
 
-/** 0–100 percentile for Form / Fixture / Attack. */
+/** 0–100 percentile per component (FPL-Edge methodology). */
 export function components(p: Player) {
   return {
     form: pct(p.form, values(x => x.form)),
@@ -15,10 +15,19 @@ export function components(p: Player) {
   };
 }
 
-export const edgeScore = (p: Player): number => {
+const composite = (p: Player) => {
   const c = components(p);
-  return Math.round(c.form * 0.4 + c.fix * 0.3 + c.att * 0.3);
+  return c.form * 0.4 + c.fix * 0.3 + c.att * 0.3;
 };
+
+// GW1 baseline distribution → min-max normalize so the scale ALWAYS spans 0–100
+const BASELINE = PLAYERS.map(composite);
+const LO = BASELINE.length ? Math.min(...BASELINE) : 0;
+const HI = BASELINE.length ? Math.max(...BASELINE) : 1;
+
+export const edgeScore = (p: Player): number =>
+  HI === LO ? 50 : Math.min(100, Math.max(0,
+    Math.round(((composite(p) - LO) / (HI - LO)) * 100)));
 
 export const edgeColor = (s: number): string =>
   s >= EDGE_BANDS.green ? 'text-neon' : s >= EDGE_BANDS.yellow ? 'text-warn' : 'text-danger';
@@ -42,7 +51,6 @@ export type Tip =
 export function transferTip(squad: Player[], budget: number): Tip | null {
   const inSquad = (p: Player) => squad.some(s => s.id === p.id);
 
-  // Rule #1: complete the squad BEFORE any clever advice.
   if (!squadComplete(squad)) {
     const need = (Object.keys(SLOTS) as Position[]).find(
       pos => squad.filter(p => p.pos === pos).length < SLOTS[pos])!;
@@ -59,5 +67,5 @@ export function transferTip(squad: Player[], budget: number): Tip | null {
 
   if (up && edgeScore(up) - edgeScore(worst) >= 8)
     return { kind: 'SWAP', p: up, out: worst, why: `+${edgeScore(up) - edgeScore(worst)} EDGE` };
-  return null; // UI may show "✓ Squad is EDGE-optimal" ONLY when this is null
-} 
+  return null;
+}

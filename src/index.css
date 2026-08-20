@@ -3,34 +3,38 @@
 @tailwind utilities;
 
 @layer base {
+  html { @apply antialiased; }
   body {
-    @apply bg-ink text-slate-200 font-ui antialiased overflow-x-hidden;
+    @apply bg-ink text-slate-200 font-ui;
+    font-size: 15px;
+    letter-spacing: .01em;
+    font-weight: 450;               /* Inter variable-ish: slightly heavier body */
   }
-  .num {
-    @apply font-mono tabular-nums tracking-tight;
+  h1, h2, h3, h4 {
+    @apply font-display text-slate-100;
+    letter-spacing: .05em;          /* broadcast-title airiness */
   }
+  b, strong { @apply font-semibold text-slate-100; }   /* names & totals pop */
+  button { @apply font-display; letter-spacing: .04em; }
 }
 
 @layer components {
+  .num { @apply font-mono font-semibold tabular-nums tracking-tight; }  /* scoreboard weight */
   .btn-neon {
-    @apply bg-neon/10 text-neon border border-neon/30 px-4 py-2 rounded-lg 
-           font-semibold hover:bg-neon/20 transition-all active:scale-95 disabled:opacity-50;
+    @apply bg-neon/10 text-neon border border-neon/30 px-4 py-2 rounded-lg
+          font-semibold hover:bg-neon/20 transition-all active:scale-95 disabled:opacity-50;
   }
-  .btn-ghost {
-    @apply text-slate-400 hover:text-white px-4 py-2 rounded-lg transition-all;
-  }
-  .card {
-    @apply bg-card border border-white/5 rounded-xl shadow-sm;
-  }
+  .btn-ghost { @apply text-slate-400 hover:text-white px-4 py-2 rounded-lg transition-all; }
+  .card { @apply bg-card border border-white/5 rounded-xl shadow-sm; }
 }
 
-/* Spotlight target override for tutorial */
-.tut-target {
-  position: relative;
-  z-index: 51 !important;
-}
+/* tutorial spotlight target */
+.tut-target { position: relative; z-index: 51 !important; }
 
-/* Accessibility: Respect user motion preferences */
+/* confetti */
+@keyframes confetti { from { transform: translateY(-10vh) rotate(0); } to { transform: translateY(110vh) rotate(720deg); } }
+.animate-confetti { animation: confetti 2.2s linear infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -40,5 +44,25 @@
   }
 }
 
-@keyframes confetti { from { transform: translateY(-10vh) rotate(0); } to { transform: translateY(110vh) rotate(720deg); } }
-.animate-confetti { animation: confetti 2.2s linear infinite; }
+/* ── Captain: gold & black engraving theme ─────────────────────── */
+.captain-card {
+  border: 2px solid #d4af37;
+  background:
+    repeating-linear-gradient(45deg, rgba(212,175,55,.07) 0 2px, transparent 2px 6px), /* engraved etch lines */
+    radial-gradient(120% 90% at 50% 0%, #2a2410 0%, #171307 55%, #0c0a04 100%);        /* black metal */
+  box-shadow: 0 0 18px rgba(212,175,55,.28), inset 0 1px 0 rgba(255,215,0,.25), inset 0 -10px 24px rgba(0,0,0,.65);
+}
+.captain-card b   { color: #ffe08a; text-shadow: 0 1px 0 #000, 0 0 12px rgba(255,215,0,.35); }
+.captain-card .num{ color: #e6cf7f; }
+.captain-badge {
+  display: inline-block; font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9px; font-weight: 800; letter-spacing: .12em; padding: 2px 6px; border-radius: 4px;
+  color: #0c0a04; background: linear-gradient(180deg, #ffe08a, #d4af37 60%, #b8860b);
+  border: 1px solid #8a6d1f; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 8px rgba(212,175,55,.4);
+}
+.captain-btn {
+  display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 9999px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 900;
+  color: #0c0a04; background: linear-gradient(180deg, #ffe08a, #d4af37 60%, #b8860b);
+  box-shadow: 0 0 10px rgba(212,175,55,.5), inset 0 1px 0 rgba(255,255,255,.5);
+}

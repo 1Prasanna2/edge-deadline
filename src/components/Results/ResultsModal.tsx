@@ -1,5 +1,6 @@
 import { MODES, type GW } from '@/lib/config';
 import type { SimOut } from '@/lib/simulator';
+import {CountUp} from '../UI/CountUp';
 
 function Confetti() {
   return (
@@ -20,7 +21,7 @@ export function ResultsModal({ gw, last, onNext }: { gw: GW; last: SimOut; onNex
       {won && <Confetti />}
       <div className="card bg-panel rounded-2xl p-6 w-[min(560px,92vw)] max-h-[85vh] overflow-y-auto">
         <div className="text-xs text-slate-500">GW{gw} FULL‑TIME</div>
-        <h2 className="num text-4xl mt-1">{last.total} <span className="text-base text-slate-400">pts • avg {MODES[gw].oppAvg}</span></h2>
+        <h2 className="num text-4xl mt-1"><CountUp value={last.total} /> <span className="text-base text-slate-400">pts • avg {MODES[gw].oppAvg}</span></h2>
         <p className={`mt-1 text-sm ${won ? 'text-neon' : 'text-warn'}`}>
           {won ? '🎉 You beat the average manager!' : 'Behind the average — comeback time.'}
         </p>
@@ -47,7 +48,7 @@ export function DoneModal({ totals, onReset }: { totals: number[]; onReset: () =
     <div className="fixed inset-0 z-50 grid place-items-center bg-ink/95 p-4">
       <div className="card bg-panel rounded-2xl p-8 text-center w-[min(440px,92vw)]">
         <div className="text-xs text-slate-500">SEASON COMPLETE</div>
-        <h2 className="num text-5xl mt-2">{total}</h2>
+        <h2 className="num text-5xl mt-2"><CountUp value={total} /></h2>
         <p className="num text-sm text-slate-400">average manager: {avg}</p>
         <p className={`mt-3 text-sm ${total >= avg ? 'text-neon' : 'text-warn'}`}>
           {total >= avg ? '🏆 You beat the algorithm. Title charge!' : 'The algorithm wins this time. Rebuild and retry.'}

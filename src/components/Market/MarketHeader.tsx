@@ -9,12 +9,12 @@ export function MarketHeader({ pool, squad, budgetLeft, gw }: {
   const budget = MODES[gw].budget;
   const spent = budget - budgetLeft;
   return (
-    <div className="card p-3 space-y-2">
+    <div data-tut="budget" className="card p-3 space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-[10px] tracking-widest text-slate-500">BUDGET</span>
         <span className="num text-xs text-neon">£{budgetLeft.toFixed(1)}m left • £{spent.toFixed(1)}m spent</span>
       </div>
-      <div data-tut="budget" className="h-1.5 rounded bg-white/10 overflow-hidden">
+      <div className="h-1.5 rounded bg-white/10 overflow-hidden">
         <div className="h-full bg-neon transition-all duration-500" style={{ width: `${(spent / budget) * 100}%` }} />
       </div>
       <div className="flex gap-1.5 pt-1">

@@ -2,7 +2,7 @@ import type { Player } from '@/data/players';
 import { SLOTS , type Position} from '@/lib/config';
 import { edgeScore } from '@/lib/edgeScoring';
 
-const ORDER: Position[] = ['FWD', 'MID', 'DEF', 'GKP'];
+const ORDER: Position[] = ['FWD', 'MID', 'DEF', 'GKP']
 
 export function TacticalPitch({ squad, captainId, suggestedCaptainId, onCaptain, onRemove }: {
   squad: Player[]; captainId: string | null; suggestedCaptainId: string | null;
@@ -34,7 +34,7 @@ export function TacticalPitch({ squad, captainId, suggestedCaptainId, onCaptain,
                 <div key={si}
                   className={`relative rounded-xl p-4 pt-7 text-center backdrop-blur transition hover:scale-[1.03] ${
                     captainId === p.id
-                      ? 'bg-neon/15 border-2 border-neon shadow-glow'          // captain = max highlight
+                      ? 'captain-card'          // captain = max highlight
                       : 'bg-[#1a3d29]/90 border border-neon/50 shadow-glow'     // every placed player glows
                   }`}>
                   <span className="absolute top-2 left-2.5 text-[10px] num text-neon/80">{pos}</span>
@@ -42,12 +42,13 @@ export function TacticalPitch({ squad, captainId, suggestedCaptainId, onCaptain,
                     className="absolute top-2 right-9 w-6 h-6 rounded-full bg-white/10 text-slate-300 hover:bg-danger/50 hover:text-white text-xs">✕</button>
                   <button onClick={() => onCaptain(p.id)} title="Captain (×2)"
                     className={`absolute top-2 right-2 w-6 h-6 rounded-full num text-xs ${
-                      captainId === p.id ? 'bg-neon text-ink font-black' : 'bg-white/10 text-slate-200 hover:bg-white/25'}`}>C</button>
+                      captainId === p.id ? 'captain-btn' : 'bg-white/10 text-slate-200 hover:bg-white/25'}`}>C</button>
                   {suggestedCaptainId === p.id && captainId !== p.id && (
                     <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-neon text-ink text-[11px] font-black grid place-items-center animate-pulse shadow-glow">C</span>
                   )}
                   <span className="mx-auto w-11 h-11 rounded-full grid place-items-center bg-white/10 ring-2 ring-neon/60 num text-sm text-slate-100">{p.tag}</span>
                   <b className="block text-base text-slate-50 mt-1.5">{p.name}</b>
+                  {captainId === p.id && <span className="captain-badge">© CAPTAIN</span>}
                   <span className="num text-[11px] text-slate-300">EDGE {edgeScore(p)} <span className="text-neon">●</span></span>
                 </div>
               ) : (

@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "sync": "node scripts/sync-fpl.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "preship": "npm run sync && npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
     "react": "^19.2.8",
