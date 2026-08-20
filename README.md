@@ -11,10 +11,10 @@ Inspired by professional analytics dashboards (like FPL-Edge), this game turns r
 
 ## Game Shots
 ***Game Field***
-![Game Screenshot or GIF](public\Game_Field.png)
+![Game Screenshot or GIF](public/Game_Field.png)
 
 ***Player Pool***
-![Game Screenshot](public\Player_Pool.png)
+![Game Screenshot](public/Player_Pool.png)
 
 ## 🏗️ Architecture
 The game is 100% client-side, relying on a strict unidirectional data flow. Pure logic lives in `lib/`, state management in `hooks/`, and UI in `components/`.
